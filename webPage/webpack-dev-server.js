@@ -13,31 +13,71 @@ const proxy = require('proxy-middleware');
 const url = require('url');
 const router = express.Router();
 const multer = require('multer');
+const fs = require('fs');
+const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+const tokenLength = 4;
+let testName = 'test001';
+let uploadedImagesRoute = [];
+
+/**
+ * Generates a random token
+ * @param  {integer} pLength - token length
+ * @return {string} generatedToken - a new random token
+ */
+function generateRandomToken(pLength){
+    let generatedToken = '';
+    let selectedChar = '';
+    for(let i=0;i<pLength;i++){
+        selectedChar = Math.floor(Math.random() * (chars.length));
+        generatedToken += chars.charAt(selectedChar);
+    }
+    return generatedToken;
+};
+
+testName = generateRandomToken(tokenLength);
+
 const storage = multer.diskStorage({
 	destination: function(req, file, cb){
-		cb(null,'imgs')
+		const dir = '../uploaded_images/'+testName;
+		if (!fs.existsSync(dir)){
+			fs.mkdirSync(dir);
+		}
+		cb(null,dir)
 	},
 	filename: function(req, file, cb){
-		cb(null, Date.now() + file.originalname);
+		cb(null, testName +'_'+ file.originalname);
 	}
 });
 
 const upload = multer({storage:storage});
 
-app.get('/',function(req, res, next){
-	res.render('index',{title: 'Express'});
-});
-
 app.post('/',upload.any(),function(req,res,next){
-	console.log(req.files);
-	res.send(req.files);
-});
-/*
-app.post('/', function (req, res) {
-      res.sendFile(path.join(__dirname +'/jose.html'));
-});*/
+	//console.log(req);
+	//res.send('finalizado');
+	//testName = req.body.myName;
+	//console.log(req.files);
+	
+	uploadedImagesRoute = req.files.map(function(image){
+		return '"../../'+image.path+'"';
+	});
+	console.log(uploadedImagesRoute);
+	const lastUsedToken = testName;
+	testName = generateRandomToken(tokenLength); 
+	//res.send(lastUsedToken);
+	res.redirect('http://localhost:3000/page_two?token='+lastUsedToken
+		+'&images='+encodeURI( uploadedImagesRoute )
+	);
+},upload.any());
 
-//app.use('/*', proxy(url.parse('http://localhost:3000/assets')));
+
+app.get('/img_routes',function(req, res){
+	res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ a: 1 }));
+    /*
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ a: 1 });
+    */
+});
 
 // always dev enviroment when running webpack dev server
 const env = { dev: process.env.NODE_ENV };

@@ -18,12 +18,12 @@ export default class Home extends React.Component{
 			<div className="home__container">
 				<h1> Prepocesamiento de Imágenes </h1>
 				<div>
-					
+					<h2>Por favor seleccione las imágenes que desea procesar</h2>
+					<br/>
 					<form action="http://localhost:3001" method="post" encType="multipart/form-data">
-					<input type="file" name="myimage1"/><br/>
+					<input type="file" name="images[]" multiple/><br/>
 				<br/>
-					<input type="file" name="myimage2"/><br/>
-				<br/>
+					
 					<input type="submit" name="submit"/>
 						
 					</form>
@@ -31,7 +31,7 @@ export default class Home extends React.Component{
 
 				<br/>
 				
-				<Link className="link_to_page_two" to={'/page_two'}>Go to page 2</Link>
+				{/*<Link className="link_to_page_two" to={'/page_two'}>Go to page 2</Link>*/}
 			</div>
 		);
 	}
