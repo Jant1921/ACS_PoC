@@ -20,33 +20,21 @@ public class Main {
 		
 		
 		
-		
-		//carga la imagen en una matriz
-		//Mat img = Imgcodecs.imread("F:\\eclipseworkspace\\workspace\\OpenCV Testing\\imagtest.tif");
-		
-		
+		//carga la imagen en una matriz		
 		direc="F:\\eclipseworkspace\\workspace\\OpenCV Testing\\";
 		imgname="imagtest.tif";
+		
 		//carga matriz de imagen en img
 		img = imgh.cargarimg(direc, imgname);
-		
-		
-		//Mat img = Imgcodecs.imread("F:\\eclipseworkspace\\workspace\\OpenCV Testing\\yo.JPG");
-		 //System.out.println(img.rows());
-		 //System.out.println(img.cols());
-		 
-		 
-		 
+	
+	 
 		 //escribe la imagen recien leida
 		 Imgcodecs.imwrite("F:\\eclipseworkspace\\workspace\\OpenCV Testing\\prueba1.tif", img);
 		 
 		 
-		 //pasa a grayscale la imagen leida
-		 Imgproc.cvtColor(img, prueba, Imgproc.COLOR_RGB2GRAY);
-		 
 		 
 		 //escribre la imagen en escala de grises
-		 Imgcodecs.imwrite("F:\\eclipseworkspace\\workspace\\OpenCV Testing\\prueba2.tif", prueba);
+
 		 prueba=imgh.imgtograyscale(img);
 		 
 		 
@@ -57,7 +45,7 @@ public class Main {
 		 imgh.setImgname(imgname);
 		 imgh.guardarimg(prueba);
 		 
-		 
+		 //crea una matriz para apoyo
 		 Mat img2= prueba;
 		 
 		 //algoritmo de ecualizacion de histogramas
@@ -66,7 +54,7 @@ public class Main {
 		 
 		 //utilizacion del algoritmo clahe
 		 img2=imgh.clahe(prueba);
-		 
+		 //guardar la imagen modificada por clahe
 		 imgname="prueba4.tif";
 		 imgh.setImgname(imgname);
 		 imgh.guardarimg(img2);
