@@ -1,5 +1,6 @@
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -11,7 +12,7 @@ public class Main {
 				
 		//instancia la clase de manejo de imagenes
 		Imagehandler imgh= new Imagehandler();
-		//instancias de variables a utilizar
+		//instancias de variables base a utilizar
 		String direc="";
 		String imgname="";
 		Mat img= new Mat();
@@ -20,45 +21,65 @@ public class Main {
 		
 		
 		
-		//carga la imagen en una matriz		
+		//define el directorio donde guardara las imagenes	
 		direc="F:\\eclipseworkspace\\workspace\\OpenCV Testing\\";
 		imgname="imagtest.tif";
+		
 		
 		//carga matriz de imagen en img
 		img = imgh.cargarimg(direc, imgname);
 	
 	 
 		 //escribe la imagen recien leida
-		 Imgcodecs.imwrite("F:\\eclipseworkspace\\workspace\\OpenCV Testing\\prueba1.tif", img);
-		 
+		 imgh.setDir(direc);
+		 imgh.setImgname("prueba1.tif");
+		 imgh.guardarimg(img);
 		 
 		 
 		 //escribre la imagen en escala de grises
-
 		 prueba=imgh.imgtograyscale(img);
-		 
-		 
-		 direc = "F:\\eclipseworkspace\\workspace\\OpenCV Testing\\";
-		 imgname= "pruebagrayscale.tif";
-		 
+		 imgname= "pruebagrayscale.tif";	 
 		 imgh.setDir(direc);
 		 imgh.setImgname(imgname);
 		 imgh.guardarimg(prueba);
 		 
+		 //copia el estado actual de variable prueba(matriz en escala de grises)
+		 Mat respaldo = prueba;
+		 
+		 
+		
+		 
+		 
+ 
+		 
+		 
 		 //crea una matriz para apoyo
 		 Mat img2= prueba;
 		 
-		 //algoritmo de ecualizacion de histogramas
-		 Imgproc.equalizeHist(prueba, img);
-		 Imgcodecs.imwrite("F:\\eclipseworkspace\\workspace\\OpenCV Testing\\prueba3.tif", img);
 		 
 		 //utilizacion del algoritmo clahe
 		 img2=imgh.clahe(prueba);
+		
+		
+		 
 		 //guardar la imagen modificada por clahe
-		 imgname="prueba4.tif";
+		 imgname="pruebaclahe.tif";
 		 imgh.setImgname(imgname);
 		 imgh.guardarimg(img2);
+		 
+		 
+	
 		
+		 //llamado de la funcion para calcular el mse
+		 double mse=imgh.getmse(respaldo, img2);
+		 
+		 System.out.println("mse "+mse);
+		 
+		 //llamado de la funcion para calcular el psnr
+		 double psnr = imgh.getpsnr(mse);
+		 
+		 System.out.println("psnr "+psnr);
+	        
 	}
 	
 }

@@ -75,6 +75,49 @@ public class Imagehandler {
 	}
 	
 	
+	
+	/**
+	 * calcula el  mean squared error
+	 * @param img  Mat de la imagen original
+	 * @param ruido Mat de la imagen con ruido
+	 * @return el mse calculado en base a las 2 imagenes
+	 */
+	public double getmse(Mat img, Mat ruido){
+		double mse;
+		int sum=0;
+		double[] val1=new double[1];
+		double[] val2=new double[1];
+		int w = img.width();
+		int h = img.height();
+		
+		for (int i=0; i<w; i++){
+			for (int j=0; j<h;j++){
+				 val1[0]= img.get(j,i)[0];
+				 val2[0]= ruido.get(j,i)[0];
+				 double error= val1[0]-val2[0];
+				 sum += (error*error);
+				
+			}
+			
+		}
+		mse= sum/(h*w);
+		return mse;
+	
+	}
+	
+	/**
+	 * calcula el peak signal to noise ratio
+	 * @param mse es el mean quared error
+	 * @return un double con el valor del psnr
+	 */
+	public double getpsnr(double mse){
+	int max=255;
+	double psnr=(20* Math.log10(max)) - (10* Math.log10(mse));
+	
+	return psnr;
+	};
+	
+	
 	/**
 	 * Retorna el valor de dir (direccion del forlder)
 	 * 
