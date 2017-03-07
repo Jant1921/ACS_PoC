@@ -64,6 +64,34 @@ public class PruebaImagenes {
 	}
 	
 	@Test
+	public void pruebaclahe() {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		try{
+			Imagehandler imgh= new Imagehandler();
+			//define el directorio donde guardara las imagenes	
+			
+			String imgname="input.tif";		
+			Mat img = new Mat(); 
+			img=imgh.cargarimg(direc, imgname);
+			
+			Mat prueba=imgh.imgtograyscale(img);
+			
+			imgname= "pruebagrayscale.tif";	 
+			imgh.setDir(direc);
+			imgh.setImgname(imgname);
+			imgh.guardarimg(prueba);
+			Mat test=imgh.clahe(prueba);
+		 
+			assert( true);
+		
+		}catch(Exception e){
+			assert(false);
+		};
+		
+		
+	}
+	
+	@Test
 	public void pruebaescalagrises() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		try{
