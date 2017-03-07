@@ -46,12 +46,7 @@ public class Main {
 		 //copia el estado actual de variable prueba(matriz en escala de grises)
 		 Mat respaldo = prueba;
 		 
-		 
-		
-		 
-		 
- 
-		 
+
 		 
 		 //crea una matriz para apoyo
 		 Mat img2= prueba;
