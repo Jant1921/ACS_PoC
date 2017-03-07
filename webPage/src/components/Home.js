@@ -20,11 +20,22 @@ export default class Home extends React.Component{
 				<div>
 					<h2>Por favor seleccione las imágenes que desea procesar</h2>
 					<br/>
+					<label>
+						Parametro 1: &nbsp; 
+						<input type="text" name="param1"/>
+					</label>
+					<br />
+					<label>
+						Parametro 2: &nbsp; 
+						<input type="text" name="param2"/>
+					</label>
+					<br/>
+					<br/>
 					<form action="http://localhost:3001" method="post" encType="multipart/form-data">
-					<input type="file" name="images[]" multiple/><br/>
-				<br/>
-					
-					<input type="submit" name="submit"/>
+						<input type="file" name="images[]" multiple/><br/>
+						<br/>
+						
+						<input type="submit" name="submit"/>
 						
 					</form>
 				</div>

@@ -21,7 +21,19 @@ export default class pageTwo extends React.Component{
 		const images = JSON.parse("["+decodeURI(this.gup('images'))+ "]");
 		console.log(images);
 		let imgTags = images.map((route,key)=>{
-			return (<img key={key} className="uploaded_image"src={route} />)
+			return (
+				<div key={key}>
+					<div>
+						<img className="uploaded_image"src={route} />
+						<img className="uploaded_image"src={route} />
+					</div>
+					<div>
+						<p> Timestamp: {Date.now()}</p>
+						<p> Info 2</p>
+						<p> Info 3</p>
+					</div>
+				</div>
+			)
 		});
 		return imgTags;
 	}
@@ -37,10 +49,6 @@ export default class pageTwo extends React.Component{
 				</div>
 				
 				<br />
-
-				<button>
-					Procesar Imágenes
-				</button>
 
 				<br />
 
