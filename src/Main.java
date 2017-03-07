@@ -21,6 +21,7 @@ public class Main {
 		
 		
 		
+		
 		//define el directorio donde guardara las imagenes	
 		direc="F:\\eclipseworkspace\\workspace\\OpenCV Testing\\";
 		imgname="imagtest.tif";
