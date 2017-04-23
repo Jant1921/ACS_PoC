@@ -1,4 +1,5 @@
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -44,7 +45,7 @@ public class Imagehandler {
 	 * @return la matriz referente a la imagen cargada
 	 */
 	public Mat cargarimg(){
-		Mat img = Imgcodecs.imread(dir+imgname);
+		Mat img = Imgcodecs.imread(dir+imgname,0);
 		return img;
 	}
 	
@@ -90,10 +91,10 @@ public class Imagehandler {
 		int w = img.width();
 		int h = img.height();
 		
-		for (int i=0; i<w; i++){
-			for (int j=0; j<h;j++){
-				 val1[0]= img.get(j,i)[0];
-				 val2[0]= ruido.get(j,i)[0];
+		for (int i=0; i<h; i++){
+			for (int j=0; j<w;j++){
+				 val1[0]= img.get(i,j)[0];
+				 val2[0]= ruido.get(i,j)[0];
 				 double error= val1[0]-val2[0];
 				 sum += (error*error);
 				
@@ -150,5 +151,129 @@ public class Imagehandler {
 	public void setImgname(String imgname) {
 		this.imgname = imgname;
 	}
+	
+	/**
+	 * 
+	 * @param img
+	 * @param ksizer
+	 * @param ksizec
+	 * @param desv
+	 * @return
+	 */
+	public Mat filtrogaus(Mat img,int ksizer,int ksizec,double desv){
+		Mat result=img;
+		double[] val1=new double[1];
+		int alfa=0;
+		int w;
+		int h;
+		int valor;
+		double valormat;
+		double[][] matriz=new double[1][1];
+		
+		w = img.width();
+		h = img.height();
+		
+		for(int i=0; i<h;i++){
+			for(int j=0; j<w;j++){
+				
+				valormat=img.get(i, j)[0];
+				result=gaussauxiliar(i,j,ksizer,ksizec,desv,valormat,result);
+		
+			}
+		}
+		 
+		/*
+		System.out.println("antes de alfa");
+		
+		//se llama a la funcion para obtener el valor de alfa
+			
+		
+		w = result.width();
+		h = result.height();
+		System.out.println("entra a alfa");
+		alfa=getalfa(result,h,w);	
+		//se multiplica la matriz por alfa
+		for (int i=0; i<h; i++){
+			for (int j=0; j<w;j++){
+				 val1[0]= result.get(i,j)[0];	 
+				 double[] data= img.get(i, j);
+				 data[0]=  val1[0]*(1/alfa);
+				 result.put(i, j, data);
+				 System.out.println("  "+ data[0]+"  "+val1[0]+" "+alfa);
+				 
+			}
+			
+			
+		}
+		*/
+		 System.out.println(result.get(1,1)[0]);
+		return result;
+		
+	}
+	
+	public Mat gaussauxiliar(int x, int y, int ksizer,int ksizec,double desv,double valormat,Mat img){
+		
+		int umin=(x+1)-((ksizer-1)/2);
+		int umax=(x+1)+((ksizer-1)/2);		
+		int vmax=(y+1)+((ksizec-1)/2);
+		int vmin=(y+1)-((ksizec-1)/2);
+		double[] val1=new double[1];
+		Mat resultado=img;
+		double suma=0;
+		double alfa=0;
+		
+		for(int i=umin; i<umax;i++){
+			for(int j=vmin; j<vmax;j++){
+				
+				if(x-i<0 || y-j<0 || i<0 || j<0){
+					suma+=0;
+				}
+				else{
+					double kernelval=getkernel(x-i,y-j,desv);
+					alfa+= kernelval;
+					val1[0]= img.get(i,j)[0];
+					suma+=kernelval*val1[0];
+				}
+				
+				
+			}
+		}
+		
+		double[] data= img.get(x, y);
+		
+		data[0]= suma*(1/alfa);
+		
+		
+		resultado.put(x,y,data);
+		
+		return resultado;
+	}
+	
+	
+	public double getkernel(int x,int y,double desv){
+		double val=Math.exp(-1* (((x*x)+(y*y)) / (2*(desv*desv))) );
+		return val;
+	}
+	
+	public int getalfa(Mat matriz,int h, int w){
+		int alfa=0;
+		double[] val1= new double[1];
+		for (int i=0; i<h; i++){
+			for (int j=0; j<w;j++){
+				val1[0]= matriz.get(i,j)[0]; 
+				alfa+=val1[0];
+				 	
+			}
+			
+		}
+		return alfa;
+		
+	}	
+	
+	
+	
+	
+	
+	
 	
 }
