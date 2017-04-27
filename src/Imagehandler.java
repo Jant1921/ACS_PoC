@@ -251,7 +251,7 @@ public class Imagehandler {
 	
 	
 	public double getkernel(int x,int y,double desv){
-		double val=Math.exp(-1* (((x*x)+(y*y)) / (2*(desv*desv))) );
+		double val=Math.exp(- (((x*x)+(y*y)) / (2*(desv*desv))) );
 		return val;
 	}
 	
@@ -270,6 +270,93 @@ public class Imagehandler {
 		
 	}	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public Mat filtrobilateral(Mat img,int ksizer,int ksizec,double desv,double desvr){
+		Mat result=img;
+		double[] val1=new double[1];
+		int alfa=0;
+		int w;
+		int h;
+		int valor;
+		double valormat;
+		double[][] matriz=new double[1][1];
+		
+		w = img.width();
+		h = img.height();
+		
+		for(int i=0; i<h;i++){
+			for(int j=0; j<w;j++){
+				
+				valormat=img.get(i, j)[0];
+				result= bilateralauxiliar(i,j,ksizer,ksizec,desv,desvr,valormat,result);
+		
+			}
+		}
+		 
+
+		 System.out.println(result.get(1,1)[0]);
+		return result;
+		
+	}
+	
+	public Mat bilateralauxiliar(int x, int y, int ksizer,int ksizec,double desv,double desvr,double valormat,Mat img){
+		
+		int umin=(x+1)-((ksizer-1)/2);
+		int umax=(x+1)+((ksizer-1)/2);		
+		int vmax=(y+1)+((ksizec-1)/2);
+		int vmin=(y+1)-((ksizec-1)/2);
+		double[] val1=new double[1];
+		Mat resultado=img;
+		double suma=0;
+		double alfa=0;
+		
+		for(int i=umin; i<umax;i++){
+			for(int j=vmin; j<vmax;j++){
+				
+				if(x-i<0 || y-j<0 || i<0 || j<0){
+					suma+=0;
+				}
+				else{
+					val1[0]= img.get(i,j)[0];
+					double kernelval=getkernelbilateral(x-i,y-j,desv,desvr,valormat,val1[0]);
+					alfa+= kernelval;					
+					suma+=kernelval*val1[0];
+				}
+				
+				
+			}
+		}
+		
+		double[] data= img.get(x, y);
+		
+		data[0]= suma*(1/alfa);
+		
+		
+		resultado.put(x,y,data);
+		
+		return resultado;
+	}
+	
+	
+	public double getkernelbilateral(int x,int y,double desv,double desvr,double valpixel,double pixelrelatkernel){
+		//double val=Math.exp(- (((x*x)+(y*y)) / (2*(desvr*desvr))) ) * Math.exp(-( Math.pow((valpixel-pixelrelatkernel), 2) / (2*desv*desv)  ) );
+		
+	//	double val=Math.exp(-(((x*x)+(y*y)) / (2*desvr*desvr)) ) * Math.exp(-( Math.pow((pixelrelatkernel-valpixel), 2) / (2*desv*desv)  ) );
+		
+		double val=Math.pow(Math.E, -((x*x+y*y) / (2*desvr*desvr))) * Math.pow(Math.E , -( Math.pow((pixelrelatkernel-valpixel), 2) / (2*desv*desv)  )); 
+	
+		return val;
+	}
+	
+
 	
 	
 	
