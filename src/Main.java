@@ -122,7 +122,7 @@ public class Main {
 		 
 		 System.out.println("psnr "+psnr);
 		 
-		//llamado de la funcion para calcular el filtro gaussiano
+		
 		 
 		 
 		
