@@ -1,5 +1,6 @@
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -67,7 +68,7 @@ public class Main {
 		 Mat respaldo6 = prueba.clone();
 		 Mat respaldo7 = prueba.clone();
 
-		 System.out.println("antes de gaus"+ prueba.width());
+		 
 		 //aplica el filtro gaussiano a la imagen
 		 Mat gaus=imgh.filtrogaus(respaldo2, 8, 8, 2);
 		 imgname= "pruebagauss1.tif";	 
@@ -76,9 +77,16 @@ public class Main {
 		 imgh.guardarimg(gaus);
 		 
 		 
-		
+		 Mat image = respaldo7.clone();
 		 
-		 System.out.println("antes de bilateral"+ prueba.width());
+		 image=imgh.addnoise(image,28);
+	        
+	     imgname= "pruebanoise.tif";  
+	     imgh.setDir(direc);
+	     imgh.setImgname(imgname);
+	     imgh.guardarimg(image);  
+		 
+		
 		 //aplica el filtro bilateral a la imagen
 		 Mat bilateral=imgh.filtrobilateral(respaldo3, 10, 10, 15, 8);
 		 imgname= "pruebabilateral1.tif";	 
@@ -86,15 +94,16 @@ public class Main {
 		 imgh.setImgname(imgname);
 		 imgh.guardarimg(bilateral);	
 			
+		 //bilateral de opencv
 		 Imgproc.bilateralFilter ( respaldo4, respaldo5, 10, 15, 8 );
-		 imgname= "pruebabilateral2.tif";	 
+		 imgname= "pruebabilateral2opencv.tif";	 
 		 imgh.setDir(direc);
 		 imgh.setImgname(imgname);
 		 imgh.guardarimg(respaldo5);
 		 
 		
 				 
-		 System.out.println("despues de gaus");
+		
 		 //crea una matriz para apoyo
 		 Mat img2= prueba;
 		 
@@ -113,9 +122,21 @@ public class Main {
 
 		
 		 //llamado de la funcion para calcular el mse
-		 double mse=imgh.getmse(respaldo, img2);
+		 double mse=imgh.getmse(respaldo, image);
 		 
-		 System.out.println("mse "+mse);
+		 System.out.println("mse " + mse);
+		 
+		 double ad=imgh.getad(respaldo, image);
+         
+         System.out.println("ad "+ ad);
+         
+         double mae=imgh.getmae(respaldo, image);
+         
+         System.out.println("mae " + mae);
+         
+         double ae=imgh.getmse(respaldo, image);
+         
+         System.out.println("ae " + ae);
 		 
 		 //llamado de la funcion para calcular el psnr
 		 double psnr = imgh.getpsnr(mse);

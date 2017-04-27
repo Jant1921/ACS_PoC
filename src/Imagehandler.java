@@ -1,5 +1,6 @@
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
-
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -118,7 +119,95 @@ public class Imagehandler {
     
     return psnr;
   }
+  
+  /**
+  * calcula el mean absolute error
+  * @param img imagen sin ruido
+  * @param ruido imagen contaminada
+  * @return calculo del mae
+  */
+  public double getmae(Mat img, Mat ruido) { //mean absolute error
+    double mae;
+    int sum = 0;
+    double[] val1 = new double[1];
+    double[] val2 = new double[1];
+    int w = img.width();
+    int h = img.height();
 
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w;j++) {
+        val1[0] = img.get(i,j)[0];
+        val2[0] = ruido.get(i,j)[0];
+        double error = Math.abs(val1[0] - val2[0]);
+        sum += (error);
+
+      }
+
+    }
+    mae = sum / (h * w);
+    return mae;
+
+  }
+
+  /**
+  * calcula el  average difference
+  * @param img imagen sin ruido
+  * @param ruido imagen contaminada
+  * @return calculo del ad
+  */
+  public double getad(Mat img, Mat ruido) { 
+    double ad;
+    int sum = 0;
+    double[] val1 = new double[1];
+    double[] val2 = new double[1];
+    int w = img.width();
+    int h = img.height();
+
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w;j++) {
+        val1[0] = img.get(i,j)[0];
+        val2[0] = ruido.get(i,j)[0];
+        double error = val1[0] - val2[0];
+        sum += (error);
+
+      }
+
+    }
+    ad = sum / (h * w);
+    return ad;
+
+  }
+  
+  
+  
+  /**
+   * calcula el  absolute error
+   * @param img imagen sin ruido
+   * @param ruido imagen contaminada
+   * @return calculo del ae
+   */  
+  public double getae(Mat img, Mat ruido) { //absolute error
+    double ae;
+    int sum = 0;
+    double[] val1 = new double[1];
+    double[] val2 = new double[1];
+    int w = img.width();
+    int h = img.height();
+
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w;j++) {
+        val1[0] = img.get(i,j)[0];
+        val2[0] = ruido.get(i,j)[0];
+        double error = Math.abs(val1[0] - val2[0]);
+        sum += error;
+
+      }
+
+    }
+    ae = sum ;
+    return ae;
+
+  }
 
 /**
  * Retorna el valor de dir (direccion del forlder)
@@ -166,10 +255,7 @@ public class Imagehandler {
    
     int w;
     int h;
-    
     double valormat;
-   
-
     w = img.width();
     h = img.height();
 
@@ -181,8 +267,6 @@ public class Imagehandler {
 
       }
     }
-
-
 
     return result;
     
@@ -292,8 +376,6 @@ public class Imagehandler {
     int h;
    
     double valormat;
- 
-    
     w = img.width();
     h = img.height();
     
@@ -381,6 +463,21 @@ public class Imagehandler {
     return val;
   }
 
+  /**
+   * 
+   * @param image matriz de imagen
+   * @param noise double con el factor de ruido
+   * @return matriz con ruido
+   */
+  public Mat addnoise(Mat image, double noise) {
+    Mat grayRnd = new Mat(image.rows(), image.cols(), image.type());
+    grayRnd.setTo(new Scalar(noise / 2, noise / 2, noise / 2));
+    Core.subtract(image, grayRnd, image);
+    Core.randu(grayRnd, 0, noise);
+    Core.add(image, grayRnd, image);
+    return image;
+    
+  }
 
 
 
