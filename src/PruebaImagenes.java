@@ -121,6 +121,27 @@ public class PruebaImagenes {
     
   }
   
+  @Test
+  public void pruebaaddnoise() {
+    try {
+      System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+      Imagehandler imgh = new Imagehandler();
+      //AGREGAR NOISE 
+      String imgname = "input.tif";
+      Mat img = new Mat(); 
+      img = imgh.cargarimg(direc, imgname);
+      Mat imgaux = img.clone();
+      Mat img1 = imgh.imgtograyscale(img);
+      Mat img2 = imgh.addnoise(imgaux, 128);
+      imgname = "pruebaimgnoise.jpg";
+      imgh.setImgname(imgname);
+      imgh.guardarimg(img2);
+      assert (true);
+    } catch (Error e) {
+      assert (false);
+    }
+  }
+  
   
   @Test
   public void pruebagauss() {
