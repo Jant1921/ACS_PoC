@@ -365,8 +365,8 @@ public class Imagehandler {
  * @param img matriz de imagen
  * @param ksizer filas del kernel
  * @param ksizec columnas del kernel
- * @param desv  desviacion dominio de espacio
- * @param desvr desviacion dominio de intensidad
+ * @param desv desviacion del dominio de la intensidad
+   * @param desvr desviacion del dominio del espacio
  * @return matriz con filtro bilateral aplicado
  */
   public Mat filtrobilateral(Mat img,int ksizer,int ksizec,double desv,double desvr) {
@@ -399,8 +399,8 @@ public class Imagehandler {
  * @param y  valor de referencia para el kernel
  * @param ksizer filas del kernel
  * @param ksizec columnas del kernel
- * @param desv desvicion del dominio de espacio
- * @param desvr desviacion del dominio de intensidad
+ * @param desv desviacion del dominio de la intensidad
+   * @param desvr desviacion del dominio del espacio
  * @param valormat valor en el punto actual de la matriz imagen
  * @param img matriz imagen
  * @return matriz con el kernel aplicado al pixel actual
@@ -435,7 +435,7 @@ public class Imagehandler {
 
     double[] data = img.get(x, y);
 
-    data[0] = suma * (1 / alfa);
+    data[0] = suma / alfa;
 
 
     resultado.put(x,y,data);
@@ -447,8 +447,8 @@ public class Imagehandler {
    * 
    * @param x valor de referencia para el kernel
    * @param y valor de referencia para el kernel
-   * @param desv desviacion del dominio del espacio
-   * @param desvr desviacion del dominio de la intensidad
+   * @param desv desviacion del dominio de la intensidad
+   * @param desvr desviacion del dominio del espacio
    * @param valpixel valor del pixel actual
    * @param pixelrelatkernel valor del pixel en la matriz actual del kernel
    * @return valor del kernel en el punto
@@ -457,9 +457,13 @@ public class Imagehandler {
                                    double valpixel,double pixelrelatkernel) {
   
 
-    double val = Math.pow(Math.E, - ((x * x + y * y) / (2 * desvr * desvr))) 
-        * Math.pow(Math.E ,-(Math.pow((pixelrelatkernel - valpixel), 2) / (2 * desv * desv))); 
+    //double val = Math.pow(Math.E, -1 * ((x * x + y * y) / (2 * desvr * desvr))) 
+    //  * Math.pow(Math.E , -1 * (Math.pow((pixelrelatkernel - valpixel), 2) / (2 * desv * desv))); 
 
+    double val = Math.pow(Math.E, (-1 * ((x * x + y * y) / (2 * desv * desv)) 
+        -  (Math.pow((pixelrelatkernel - valpixel), 2) / (2 * desvr * desvr)))); 
+     
+    
     return val;
   }
 
